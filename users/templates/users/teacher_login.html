@@ -1,6 +1,6 @@
 {% extends 'chipin/base.html' %}
 {% load static %}
-{% block title %}Student Login - ChipIn{% endblock %}
+{% block title %}Teacher Login - ChipIn{% endblock %}
 {% block content %}
     <div class="login-container">
         <form id="login-form" action="{% url 'users:login' %}" method="post" onsubmit="return executeRecaptcha();">

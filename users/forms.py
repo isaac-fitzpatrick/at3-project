@@ -32,7 +32,10 @@ class BalanceTopupForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
- 
+class Decision(forms.Form):
+    choice1 = forms.CharField(widget=forms.HiddenInput(), required=False)
+    choice2 = forms.CharField(widget=forms.HiddenInput(), required=False)
+
     
             
 

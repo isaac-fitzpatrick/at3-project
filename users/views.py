@@ -20,6 +20,15 @@ def register(request):
         form = UserRegistrationForm()
     return render(request, 'users/register.html', {'form': form})
 
+def select_role(request):
+    if request.method == "POST":
+        role = request.POST.get('role-choice')
+        if role == 'teacher':
+            return render(request, 'users/teacher_login.html')
+        elif role == 'student':
+            return render(request, 'users/login.html')
+    return render(request, 'users/home.html')
+
 @login_required(login_url='users:login')
 def user(request):
     profile = request.user.profile # requests user info
@@ -27,6 +36,37 @@ def user(request):
         'user': request.user, # gets user from user info
         'balance': profile.balance # gets balance user info
     })
+
+def teacher_login_view(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        recaptcha_response = request.POST.get("recaptcha-token")  # Updated
+        # Verify reCAPTCHA
+        data = {
+            'secret': settings.RECAPTCHA_SECRET_KEY,
+            'response': recaptcha_response,
+            'remoteip': request.META.get('REMOTE_ADDR'),
+        }
+        recaptcha_verification = requests.post(
+            "https://www.google.com/recaptcha/api/siteverify",
+            data=data
+        )
+        result = recaptcha_verification.json()
+        # Check reCAPTCHA response
+        if result.get("success"):
+            messages.error(request, "reCAPTCHA validation failed. Please try again.")
+            return redirect("users:teacher_login")  # Redirect back to the teacher login page
+        # Authenticate user if reCAPTCHA is valid
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            # Redirect to the next URL if provided, else default to user profile
+            next_url = request.GET.get('next', reverse("users:user"))  # Simplified fallback
+            return redirect(next_url)
+        else:
+            messages.error(request, "Invalid username or password.")
+    return render(request, "users/teacher_login.html")
 
 def login_view(request):
     if request.method == "POST":
