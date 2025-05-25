@@ -55,6 +55,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'ssa_project2.urls'
 
+AUTHENTICATION_BACKENDS = [
+    'users.backends.TeacherDBBackend',  # custom backend for teachers
+    'django.contrib.auth.backends.ModelBackend',  # default
+]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -82,6 +87,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'teachers_db': {
+        'ENGINE': 'django.db.backends.sqlite3', 
+        'NAME': BASE_DIR / 'teachers_db.sqlite3',  # This will create a new SQLite db, specifically for teachers
     }
 }
 

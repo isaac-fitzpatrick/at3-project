@@ -41,7 +41,7 @@ def teacher_login_view(request):
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
-        recaptcha_response = request.POST.get("recaptcha-token")  # Updated
+        recaptcha_response = request.POST.get("recaptcha-token")
         # Verify reCAPTCHA
         data = {
             'secret': settings.RECAPTCHA_SECRET_KEY,
@@ -53,16 +53,14 @@ def teacher_login_view(request):
             data=data
         )
         result = recaptcha_verification.json()
-        # Check reCAPTCHA response
         if result.get("success"):
             messages.error(request, "reCAPTCHA validation failed. Please try again.")
-            return redirect("users:teacher_login")  # Redirect back to the teacher login page
-        # Authenticate user if reCAPTCHA is valid
-        user = authenticate(request, username=username, password=password)
+            return redirect("users:teacher_login")
+        # Authenticate user using the teacher DB backend
+        user = authenticate(request, username=username, password=password, backend='users.backends.TeacherDBBackend')
         if user is not None:
-            login(request, user)
-            # Redirect to the next URL if provided, else default to user profile
-            next_url = request.GET.get('next', reverse("users:user"))  # Simplified fallback
+            login(request, user, backend='users.backends.TeacherDBBackend')
+            next_url = request.GET.get('next', reverse("users:user"))
             return redirect(next_url)
         else:
             messages.error(request, "Invalid username or password.")
