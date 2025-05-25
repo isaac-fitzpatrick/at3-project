@@ -3,6 +3,14 @@
 {% block title %}Teacher Login - ChipIn{% endblock %}
 {% block content %}
     <div class="login-container">
+        <h1>Teacher Login</h1>
+        <p>Please enter your username and password to log in.</p>
+        {% if form.errors %}
+            <div class="error">
+                <p>Invalid username or password. Please try again.</p>
+            </div>
+        {% endif %}
+        <p>If you are a student, please <a href="{% url 'users:login' %}">click here</a> to log in.</p>
         <form id="login-form" action="{% url 'users:login' %}" method="post" onsubmit="return executeRecaptcha();">
             {% csrf_token %}
             <input type="text" name="username" placeholder="Username" required>
