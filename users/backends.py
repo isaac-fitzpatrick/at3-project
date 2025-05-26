@@ -5,7 +5,7 @@ class TeacherDBBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
         UserModel = get_user_model()
         try:
-            user = UserModel.objects.using('teachers_db').get(username=username)
+            user = UserModel.objects.using('teachers_db').get(username=username) #authenticates user from teachers_db
             if user.check_password(password):
                 return user
         except UserModel.DoesNotExist:

@@ -32,8 +32,8 @@ class BalanceTopupForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-class Decision(forms.Form):
-    choice1 = forms.CharField(widget=forms.HiddenInput(), required=False)
+class Decision(forms.Form): # gives user the choice between teacher/student login
+    choice1 = forms.CharField(widget=forms.HiddenInput(), required=False) 
     choice2 = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     

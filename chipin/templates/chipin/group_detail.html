@@ -65,7 +65,7 @@
     </form>
 
     <h2>Assessments</h2>
-    <!-- Only display "Create New Event" link to the group administrator -->
+    <!-- Only display "Create New Assessment" link to the group administrator -->
     {% if request.user == group.admin %}
         <a href="{% url 'chipin:create_event' group.id %}" class="btn btn-primary">Create New Event</a>
     {% endif %}
@@ -75,7 +75,7 @@
                 <strong>{{ event.name }}</strong> - Date: {{ event.date }},
                 <strong>Assessment Notification:</strong> ${{ event.notification }},
                 <strong>Status:</strong> <span class="event-status">{{ info.status }}</span><br>
-                <!-- Only display the "Delete Event" link if the user is the group admin -->
+                <!-- Only display the "Remove Assessment" link if the user is the group admin -->
                 {% if request.user == group.admin %}
                     <a href="{% url 'chipin:delete_event' group.id event.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this assessment?');">Remove Assessment</a>
                 {% endif %}
