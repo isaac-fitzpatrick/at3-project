@@ -4,8 +4,10 @@
 
 {% block content %} 
     <h2>Welcome {{ request.user.first_name }}</h2>
-    <h3>Current Balance: ${{ request.user.profile.balance }}</h3>
+    {% if user.permissions == True %}
+        <button>Create a Course</button>
+    {% endif %}
+    <h3>Your current courses:</h3>
     <p>This page is for user management functions.</p>
-    <a href="{% url 'users:top_up' %}">Top Up Balance</a>
     <a href="{% url 'chipin:home' %}">Click through to ChipIn Functions</a>
 {% endblock %}

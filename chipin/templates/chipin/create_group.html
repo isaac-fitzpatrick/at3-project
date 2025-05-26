@@ -1,13 +1,13 @@
 {% extends 'chipin/base.html' %}
 
-{% block title %}Create a New Group{% endblock %}
+{% block title %}Create a New Course{% endblock %}
 
 {% block content %}
-    <h1>Create a New Group</h1>
+    <h1>Create a New Course</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Create Group</button>
+        <button type="submit">Create Course</button>
     </form>
     <a href="{% url 'chipin:home' %}">Back to Homepage</a>
 {% endblock %}

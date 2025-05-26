@@ -105,6 +105,7 @@ def logout_view(request):
 @login_required
 def user_view(request):
     profile = request.user.profile  # gets user's profile
+    permissions = request.user.permissions
     return render(request, 'users/user.html', {'balance': profile.balance})
 
 @login_required
