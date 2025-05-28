@@ -36,7 +36,7 @@
         <li>You are not a member of any courses yet.</li>
         {% endfor %}
     </ul>
-    {% if user.permissions == True %}
+    {% if user.profile.is_teacher == True %}
     <a href="{% url 'chipin:create_group' %}">Create a New Group</a>
     {% endif %}
 

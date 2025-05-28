@@ -9,7 +9,7 @@
         <a href="{% url 'chipin:invite_users' group.id %}">Invite Students</a>
     {% endif %}
 
-    <h2>Students</h2>
+    <h2>Members</h2>
     <ul>
         {% for member in group.members.all %}
         <li>{{ member.profile.nickname }}</li>
@@ -34,7 +34,7 @@
             {% endfor %}
         </ul>
     {% endif %}
-    <h2>Course Chat</h2>
+    <h2>Announcements</h2>
 
     <!-- Display existing comments -->
     <div class="comments-section">
@@ -49,11 +49,12 @@
                 {% endif %}
             </div>
         {% empty %}
-            <p>No comments yet. Be the first to comment!</p>
+            <p>No announcements yet.</p>
         {% endfor %}
     </div>
 
     <!-- Comment form (used for both new comments and editing existing comments) -->
+{% if request.user == group.admin %}
     <h3>{% if comment_to_edit %}Edit Comment{% else %}Add a comment{% endif %}</h3>
     <form method="POST">
         {% csrf_token %}
@@ -63,11 +64,12 @@
         </div>
         <button type="submit">{% if comment_to_edit %}Save Comment{% else %}Post Comment{% endif %}</button>
     </form>
+{% endif %}
 
     <h2>Assessments</h2>
     <!-- Only display "Create New Assessment" link to the group administrator -->
     {% if request.user == group.admin %}
-        <a href="{% url 'chipin:create_event' group.id %}" class="btn btn-primary">Create New Event</a>
+        <a href="{% url 'chipin:create_event' group.id %}" class="btn btn-primary">Create New Assessment</a>
     {% endif %}
     <ul>
         {% for event, info in event_share_info.items %}

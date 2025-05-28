@@ -30,7 +30,7 @@ class Profile(models.Model):
     nickname = models.CharField(max_length=30, unique=True, null=False, blank=False)
     max_spend = models.DecimalField(max_digits=10, decimal_places=2, default=100.00)  # max spend
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=100.00)  # users balance
-    permissions = models.BooleanField # users permissions (teacher/student)
+    is_teacher = models.BooleanField(default=False) # users permissions (teacher/student)
 
     def clean(self):
         validate_unique_nickname(self.nickname, instance=self)

@@ -219,16 +219,16 @@ def delete_comment(request, comment_id):
 def create_event(request, group_id):
     group = get_object_or_404(Group, id=group_id)
     if request.user != group.admin:
-        messages.error(request, "Only the group administrator can create events.")
+        messages.error(request, "Only the teacher can create assessments.")
         return redirect('chipin:group_detail', group_id=group.id)
     if request.method == 'POST':
         event_name = request.POST.get('name')
         event_date = request.POST.get('date')
-        total_spend = request.POST.get('total_spend')
+        event_notification = request.POST.get('notification')
         event = Event.objects.create(
             name=event_name,
             date=event_date,
-            total_spend=total_spend,
+            notification=event_notification,
             group=group
         )
         messages.success(request, f'Event "{event_name}" created successfully!')
