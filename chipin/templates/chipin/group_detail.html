@@ -75,7 +75,7 @@
         {% for event, info in event_share_info.items %}
             <li>
                 <strong>{{ event.name }}</strong> - Date: {{ event.date }},
-                <strong>Assessment Notification:</strong> ${{ event.notification }},
+                <strong>Assessment Notification:</strong> <url>{{ event.notification }}</url><br>
                 <strong>Status:</strong> <span class="event-status">{{ info.status }}</span><br>
                 <!-- Only display the "Remove Assessment" link if the user is the group admin -->
                 {% if request.user == group.admin %}

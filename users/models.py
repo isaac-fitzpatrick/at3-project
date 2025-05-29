@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.conf import settings
 import os
 
 @receiver(post_save, sender=User)
@@ -43,6 +44,16 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+    @property
+    def pfp_url(self):
+        filename = f"{self.nickname}.jpg"
+        file_path = os.path.join(settings.MEDIA_ROOT, "pfps", filename)
+        print("Checking for profile image at:", file_path)
+        if os.path.exists(file_path):
+            return f"{settings.MEDIA_URL}pfps/{filename}"
+        else:
+            return f"{settings.MEDIA_URL}pfps/blank.jpg"
 
 class Transaction():
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -3,7 +3,7 @@
 {% block title %}User Management{% endblock %}
 
 {% block content %} 
-    <img>{{ request.user.pfp }}</img><h2>Welcome {{ request.user.first_name }}</h2>
+    <h2><img src="{{ request.user.profile.pfp_url }}" height="50" width="50">Welcome {{ request.user.first_name }}</h2>
     <h3>Your current courses:</h3>
     <p>This page is for user management functions.</p>
     <a href="{% url 'chipin:home' %}">Click through to ChipIn Functions</a>

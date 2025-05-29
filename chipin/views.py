@@ -218,7 +218,7 @@ def delete_comment(request, comment_id):
 
 @login_required
 def create_event(request, group_id):
-    directory_folder = 'notifications'  # Directory to store notification files
+    directory_folder = settings.BASE_DIR  # Directory to store notification files
     group = get_object_or_404(Group, id=group_id)
     if request.user != group.admin:
         messages.error(request, "Only the teacher can create assessments.")
@@ -231,7 +231,7 @@ def create_event(request, group_id):
         event = Event.objects.create(
             name=event_name,
             date=event_date,
-            notification=f'{directory_folder}\{event_name}',
+            notification=event_notification,
             group=group
         )
         messages.success(request, f'Event "{event_name}" created successfully!')
