@@ -55,14 +55,14 @@
 
     <!-- Comment form (used for both new comments and editing existing comments) -->
 {% if request.user == group.admin %}
-    <h3>{% if comment_to_edit %}Edit Comment{% else %}Add a comment{% endif %}</h3>
+    <h3>{% if comment_to_edit %}Edit Announcement{% else %}Add an Announcement{% endif %}</h3>
     <form method="POST">
         {% csrf_token %}
         <div class="form-group">
             {{ form.content.errors }}
             {{ form.content }}
         </div>
-        <button type="submit">{% if comment_to_edit %}Save Comment{% else %}Post Comment{% endif %}</button>
+        <button type="submit">{% if comment_to_edit %}Save Announcement{% else %}Post Announcement{% endif %}</button>
     </form>
 {% endif %}
 

@@ -1,0 +1,16 @@
+{% extends 'chipin/base.html' %}
+
+{% block title %}Enroll a new Student{% endblock %}
+
+{% block content %}
+{% if user.profile.is_teacher == True %}
+    <h1>Enroll a new Student</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Enroll</button>
+    </form>
+{% else %}
+    <h1>Error 1</h1>
+    <a>You do not have permission to enroll a student, please return home. If this is a mistake please contact your administrator.</a>
+{% endblock %}

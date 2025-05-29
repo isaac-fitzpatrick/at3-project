@@ -12,6 +12,7 @@ from .models import GroupJoinRequest
 from .forms import CommentForm
 from .models import Event
 import urllib.parse
+import os
 
 @login_required
 def home(request):
@@ -217,6 +218,7 @@ def delete_comment(request, comment_id):
 
 @login_required
 def create_event(request, group_id):
+    directory_folder = 'notifications'  # Directory to store notification files
     group = get_object_or_404(Group, id=group_id)
     if request.user != group.admin:
         messages.error(request, "Only the teacher can create assessments.")
@@ -225,15 +227,24 @@ def create_event(request, group_id):
         event_name = request.POST.get('name')
         event_date = request.POST.get('date')
         event_notification = request.POST.get('notification')
+        uploadfile(directory_folder, event_notification, event_name)  # Upload the notification file
         event = Event.objects.create(
             name=event_name,
             date=event_date,
-            notification=event_notification,
+            notification=f'{directory_folder}\{event_name}',
             group=group
         )
         messages.success(request, f'Event "{event_name}" created successfully!')
         return redirect('chipin:group_detail', group_id=group.id)
     return render(request, 'chipin/create_event.html', {'group': group})
+
+@login_required
+def uploadfile(path, file, name):
+    os.rename(f'{file}', f'{name}')
+    file_path = os.path.join(path, name)
+    file.save(path)
+    return
+    
 
 @login_required
 def join_event(request, group_id, event_id):
@@ -312,4 +323,3 @@ def delete_event(request, group_id, event_id):
     event.delete()
     messages.success(request, f"The event '{event.name}' has been deleted.")
     return redirect('chipin:group_detail', group_id=group.id)
-

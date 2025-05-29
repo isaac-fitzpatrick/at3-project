@@ -8,6 +8,7 @@ from .forms import UserRegistrationForm
 from .forms import BalanceTopupForm
 import requests
 from django.conf import settings
+import os
 
 def register(request):
     if request.method == "POST":
@@ -34,7 +35,6 @@ def user(request):
     profile = request.user.profile # requests user info
     return render(request, "users/user.html", {
         'user': request.user, # gets user from user info
-        'balance': profile.balance # gets balance user info
     })
 
 def teacher_login_view(request):
