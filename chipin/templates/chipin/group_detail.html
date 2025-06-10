@@ -72,11 +72,15 @@
         <a href="{% url 'chipin:create_event' group.id %}" class="btn btn-primary">Create New Assessment</a>
     {% endif %}
     <ul>
-        {% for event, info in event_share_info.items %}
+        {% for event in events %}
             <li>
                 <strong>{{ event.name }}</strong> - Date: {{ event.date }},
-                <strong>Assessment Notification:</strong> <url>{{ event.notification }}</url><br>
-                <strong>Status:</strong> <span class="event-status">{{ info.status }}</span><br>
+                {% if event.notification %}
+                    <strong>Assessment Notification:</strong>
+                    <a href="{{ event.notification.url }}" target="_blank">{{ event.notification.name|slice:"notifications/" }}</a><br>
+                {% else %}
+                    <strong>Assessment Notification:</strong> None<br>
+                {% endif %}
                 <!-- Only display the "Remove Assessment" link if the user is the group admin -->
                 {% if request.user == group.admin %}
                     <a href="{% url 'chipin:delete_event' group.id event.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this assessment?');">Remove Assessment</a>

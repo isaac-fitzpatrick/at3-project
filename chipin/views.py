@@ -66,26 +66,14 @@ def group_detail(request, group_id, edit_comment_id=None):
             return redirect('chipin:group_detail', group_id=group.id)
     else:
         form = CommentForm(instance=comment_to_edit) if comment_to_edit else CommentForm()
-    # Calculate event share for each event and check user eligibility
-    event_share_info = {}
-    for event in events:
-        event_share = event.calculate_share()
-        user_eligible = request.user.profile.max_spend >= event_share
-        user_has_joined = request.user in event.members.all()  # Check if the user has already joined the event
-        event_share_info[event] = {
-            'share': event_share,
-            'eligible': user_eligible,
-            'status': event.status,
-            'joined': user_has_joined
-        }
-    # Return data to the template
+    
+        # return a response
     return render(request, 'chipin/group_detail.html', {
         'group': group,
         'comments': comments,
+        'events': events,
         'form': form,
         'comment_to_edit': comment_to_edit,
-        'events': events,
-        'event_share_info': event_share_info,
     })
 
 @login_required
@@ -218,7 +206,6 @@ def delete_comment(request, comment_id):
 
 @login_required
 def create_event(request, group_id):
-    directory_folder = settings.BASE_DIR  # Directory to store notification files
     group = get_object_or_404(Group, id=group_id)
     if request.user != group.admin:
         messages.error(request, "Only the teacher can create assessments.")
@@ -226,24 +213,30 @@ def create_event(request, group_id):
     if request.method == 'POST':
         event_name = request.POST.get('name')
         event_date = request.POST.get('date')
-        event_notification = request.POST.get('notification')
-        uploadfile(directory_folder, event_notification, event_name)  # Upload the notification file
+        event_notification = request.FILES.get('notification', None)
         event = Event.objects.create(
             name=event_name,
             date=event_date,
-            notification=event_notification,
+            notification=event_notification,  # Django handles saving the file
             group=group
         )
-        messages.success(request, f'Event "{event_name}" created successfully!')
+        messages.success(request, f'Assessment "{event_name}" created successfully!')
         return redirect('chipin:group_detail', group_id=group.id)
     return render(request, 'chipin/create_event.html', {'group': group})
 
 @login_required
-def uploadfile(path, file, name):
-    os.rename(f'{file}', f'{name}')
-    file_path = os.path.join(path, name)
-    file.save(path)
-    return
+def uploadfile(file, name):
+    notifications_dir = os.path.join(settings.MEDIA_ROOT, "notifications")
+    os.makedirs(notifications_dir, exist_ok=True)  # Ensure the directory exists
+
+    # Build the full file path
+    file_path = os.path.join(notifications_dir, name)
+
+    # Save the uploaded file
+    with open(file_path, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+    return file_path
     
 
 @login_required

@@ -2,7 +2,7 @@
 {% block content %}
 <h2>Create Assessment for {{ group.name }}</h2>
 
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <div>
         <label for="name">Assessment Name</label>
