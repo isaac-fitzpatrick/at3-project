@@ -66,6 +66,19 @@
     </form>
 {% endif %}
 
+    {% for lesson in lessons %}
+        <h2>Lessons</h2>
+        <ul>
+            <li>
+                <strong>{{ lesson.name }}</strong> - Due: {{ lesson.due_date }}
+                <!-- Only display the "Remove Lesson" link if the user is the group admin -->
+                {% if request.user == group.admin %}
+                    <a href="{% url 'chipin:delete_lesson' group.id lesson.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this lesson?');">Remove Lesson</a>
+                {% endif %}
+            </li>
+        </ul>
+    {% endfor %}
+
     <h2>Assessments</h2>
     <!-- Only display "Create New Assessment" link to the group administrator -->
     {% if request.user == group.admin %}

@@ -34,3 +34,36 @@ class Event(models.Model):
     group = models.ForeignKey(Group, related_name='events', on_delete=models.CASCADE)
     members = models.ManyToManyField(User, related_name='event_memberships', blank=True)  
     notification = models.FileField(upload_to='notifications/', blank=True, null=True)
+
+class Lesson(models.Model):
+    name = models.CharField(max_length=32)
+    due_date = models.DateField()
+    description = models.TextField() 
+    file = models.FileField(upload_to='resources/', blank=True, null=True) # Uploaded resources by the teacher
+    group = models.ForeignKey(Group, related_name='lessons', on_delete=models.CASCADE) # Parent
+    response = models.ManyToManyField(User, related_name='responses', blank=True) # Tracks the amount of responses/content of responses
+    
+    def __str__(self):
+        return self.name
+
+class LessonResource(models.Model):
+    file = models.FileField(upload_to='resources/')
+    lesson = models.ForeignKey('Lesson', related_name='resources', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.file.name
+    
+class StudentSubmission(models.Model):
+    lesson = models.ForeignKey(Lesson, related_name='submissions', on_delete=models.CASCADE)
+    student = models.ForeignKey(User, related_name='submissions', on_delete=models.CASCADE)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.student.username} - {self.lesson.name}"
+
+class SubmissionFile(models.Model):
+    submission = models.ForeignKey(StudentSubmission, related_name='files', on_delete=models.CASCADE)
+    file = models.FileField(upload_to='submissions/')
+
+    def __str__(self):
+        return self.file.name

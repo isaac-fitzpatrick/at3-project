@@ -11,6 +11,11 @@ from .models import Group, Comment
 from .models import GroupJoinRequest
 from .forms import CommentForm
 from .models import Event
+from .models import Lesson
+from .forms import LessonForm
+from .models import LessonResource
+from .models import StudentSubmission
+from .forms import StudentSubmissionForm
 import urllib.parse
 import os
 
@@ -316,3 +321,47 @@ def delete_event(request, group_id, event_id):
     event.delete()
     messages.success(request, f"The event '{event.name}' has been deleted.")
     return redirect('chipin:group_detail', group_id=group.id)
+
+@login_required
+def create_lesson(request, group_id):
+    group = get_object_or_404(Group, id=group_id)
+    if request.user != group.admin:
+        messages.error(request, "Only the teacher can create lessons.")
+        return redirect('chipin:group_detail', group_id=group.id)
+    if request.method == 'POST':
+        form = LessonForm(request.POST, request.FILES)
+        if form.is_valid():
+            lesson = form.save(commit=False)
+            lesson.group = group
+            lesson.save()
+            form.save_m2m()  # Save the many-to-many relationships
+            messages.success(request, f'Lesson "{lesson.name}" created successfully!')
+            return redirect('chipin:group_detail', group_id=group.id)
+    else:
+        form = LessonForm()
+
+    return render(request, 'chipin/create_lesson.html', {'group': group})
+
+@login_required
+def lesson_detail(request, lesson_id):
+    lesson = get_object_or_404(Lesson, id=lesson_id)
+    submissions = lesson.submissions.all()
+
+    if request.method == 'POST' and request.user != lesson.group.admin:
+        form = StudentSubmissionForm(request.POST, request.FILES)
+        if form.is_valid():
+            submission = form.save(commit=False)
+            submission.lesson = lesson
+            submission.student = request.user
+            submission.save()
+            form.save_m2m()
+            messages.success(request, "Your files have been uploaded successfully!")
+            return redirect('chipin:lesson_detail', lesson_id=lesson.id)
+    else:
+        form = StudentSubmissionForm()
+
+    return render(request, 'chipin/lesson_detail.html', {
+        'lesson': lesson,
+        'form': form,
+        'submissions': submissions,
+    })
