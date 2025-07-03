@@ -23,12 +23,24 @@
     </div>
     {% if request.user != group.admin %}
         <div class="student_upload">
+            {% if submission.exists %}
+                <h2>Your Submission</h2>
+                <ul>
+                    {% for file in submission.files.all %}
+                        <li>
+                            <a href="{{ file.file.url }}" target="_blank">{{ file.file.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
             <a>Upload Work</a>
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% form.as_p %}
                 <button type="submit">Upload</button>
             </form>
+            {% endif %}
+            
         </div>
     {% endif %}
     {% if request.user == group.admin %}

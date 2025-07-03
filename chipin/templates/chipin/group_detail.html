@@ -94,6 +94,9 @@
                 {% else %}
                     <strong>Assessment Notification:</strong> None<br>
                 {% endif %}
+                {% if request.user != group.admin %}
+                    <a href="{% url 'chipin:submit_event' group.id event.id %}" class="btn btn-secondary">Submit Assessment</a>
+                {% endif %}
                 <!-- Only display the "Remove Assessment" link if the user is the group admin -->
                 {% if request.user == group.admin %}
                     <a href="{% url 'chipin:delete_event' group.id event.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this assessment?');">Remove Assessment</a>
