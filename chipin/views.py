@@ -16,6 +16,9 @@ from .forms import LessonForm
 from .models import LessonResource
 from .models import StudentSubmission
 from .forms import StudentSubmissionForm
+from .models import AssessmentSubmission
+from .forms import AssessmentSubmissionForm
+from .forms import AssessmentFeedbackForm
 import urllib.parse
 import os
 
@@ -364,4 +367,54 @@ def lesson_detail(request, lesson_id):
         'lesson': lesson,
         'form': form,
         'submissions': submissions,
+    })
+
+@login_required
+def submit_assessment(request, group_id, assessment_id):
+    group = get_object_or_404(Group, id=group_id)
+    assessment = get_object_or_404(Event, id=assessment_id, group=group)
+    submissions = assessment.submissions.filter(assessment=assessment)
+
+    if request.method == 'POST' and request.user != group.admin:
+        form = AssessmentSubmissionForm(request.POST, request.FILES)
+        if form.is_valid():
+            submission = form.save(commit=False)
+            submission.assessment = assessment
+            submission.student = request.user
+            submission.save()
+            form.save_m2m()
+            messages.success(request, "Your assessment has been submitted successfully!")
+            return redirect('chipin:submit_assessment', group_id=group.id, assessment_id=assessment.id)
+    else:
+        form = AssessmentSubmissionForm()
+
+    return render(request, 'chipin/submit_assessment.html', {
+        'group': group,
+        'assessment': assessment,
+        'form': form,
+        'submissions': submissions,
+    })
+
+@login_required
+def assessment_detail(request, group_id, assessment_id):
+    group = get_object_or_404(Group, id=group_id)
+    assessment = get_object_or_404(Event, id=assessment_id, group=group)
+    submissions = assessment.submissions.all()
+
+    if request.method == 'POST' and request.user == group.admin:
+        submission_id = request.POST.get('submission_id')
+        submission = get_object_or_404(AssessmentSubmission, id=submission_id)
+        feedback_form = AssessmentFeedbackForm(request.POST, instance=submission)
+        if feedback_form.is_valid():
+            feedback_form.save()
+            messages.success(request, "Feedback has been saved successfully!")
+            return redirect('chipin:assessment_detail', group_id=group.id, assessment_id=assessment.id)
+    else:
+        feedback_form = AssessmentFeedbackForm()
+
+    return render(request, 'chipin/assessment_detail.html', {
+        'group': group,
+        'assessment': assessment,
+        'submissions': submissions,
+        'feedback_form': feedback_form,
     })

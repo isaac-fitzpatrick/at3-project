@@ -67,3 +67,17 @@ class SubmissionFile(models.Model):
 
     def __str__(self):
         return self.file.name
+    
+class AssessmentSubmission(models.Model):
+    assessment = models.ForeignKey(Group, related_name='submissions', on_delete=models.CASCADE)
+    student = models.ForeignKey(User, related_name='submissions', on_delete=models.CASCADE)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    feedback = models.TextField(blank=True, null=True)  # Feedback from the teacher
+    marks = models.CharField(max_length=10, blank=True, null=True)  # Feedback in the form of a mark
+
+    def __str__(self):
+        return f"{self.student.username} - {self.lesson.name}"
+    
+class AssessmentSubmissionFile(models.Model):
+    submission = models.ForeignKey(StudentSubmission, related_name='files', on_delete=models.CASCADE)
+    file = models.FileField(upload_to='submissions/')

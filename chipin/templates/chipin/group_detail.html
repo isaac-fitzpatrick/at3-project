@@ -94,8 +94,11 @@
                 {% else %}
                     <strong>Assessment Notification:</strong> None<br>
                 {% endif %}
+                <!-- Different displays for teacher/student both linking to assessment_detail -->
                 {% if request.user != group.admin %}
-                    <a href="{% url 'chipin:submit_event' group.id event.id %}" class="btn btn-secondary">Submit Assessment</a>
+                    <a href="{% url 'chipin:assessment_detail' group.id event.id %}" class="btn btn-secondary">Submit Assessment</a>
+                {% else %}
+                    <a href="{% url 'chipin:assessment_detail' group.id event.id %}" class="btn btn-secondary">View Submissions</a>
                 {% endif %}
                 <!-- Only display the "Remove Assessment" link if the user is the group admin -->
                 {% if request.user == group.admin %}

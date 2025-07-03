@@ -3,6 +3,10 @@ from .models import Group
 from .models import Comment
 from .models import Lesson
 from .models import LessonResource
+from .models import StudentSubmission
+from .models import SubmissionFile
+from .models import AssessmentSubmission
+from .models import AssessmentSubmissionFile
 
 class GroupCreationForm(forms.ModelForm):
     class Meta:
@@ -71,3 +75,30 @@ class StudentSubmissionForm(forms.ModelForm):
         for file in files:
             SubmissionFile.objects.create(submission=submission, file=file)
         return submission
+    
+class AssessmentSubmissionForm(forms.ModelForm):
+    files = forms.FileField(
+        widget=forms.ClearableFileInput(attrs={'multiple': True}),
+        required=True,
+        label="Upload Files"
+    )
+
+    class Meta:
+        model = AssessmentSubmission
+        fields = []
+
+    def save(self, commit=True):
+        submission = super().save(commit=commit)
+        files = self.files.getlist('files')
+        for file in files:
+            AssessmentSubmissionFile.objects.create(submission=submission, file=file)
+        return submission
+    
+class AssessmentFeedbackForm(forms.ModelForm):
+    class Meta:
+        model = AssessmentSubmission
+        fields = ['feedback', 'marks']
+        widgets = {
+            'feedback': forms.Textarea(attrs={'rows': 2, 'placeholder': 'Enter feedback...'}),
+            'marks': forms.TextInput(attrs={'placeholder': 'e.g., 19/20'}),
+        }

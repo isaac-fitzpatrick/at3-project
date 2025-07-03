@@ -1,0 +1,53 @@
+{% extends 'chipin/base.html' %}
+{% block title %}Assessment Details - {{ assessment.name }}{% endblock %}
+{% block content %}
+    <h1>Assessment: {{ assessment.name }}</h1>
+    <p>Due Date: {{ assessment.date }}</p>
+
+    {% if request.user == group.admin %}
+        <h2>Student Submissions</h2>
+        {% if submissions %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Files</th>
+                        <th>Submitted At</th>
+                        <th>Feedback</th>
+                        <th>Marks</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for submission in submissions %}
+                        <tr>
+                            <td>{{ submission.student.profile.nickname }}</td>
+                            <td>
+                                <ul>
+                                    {% for file in submission.files.all %}
+                                        <li>
+                                            <a href="{{ file.file.url }}" target="_blank">{{ file.file.name }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>{{ submission.submitted_at }}</td>
+                            <td>{{ submission.feedback|default:"No feedback yet" }}</td>
+                            <td>{{ submission.marks|default:"Not graded yet" }}</td>
+                            <td>
+                                <form method="POST" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="submission_id" value="{{ submission.id }}">
+                                    {{ feedback_form.as_p }}
+                                    <button type="submit">Save Feedback</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No submissions yet.</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}
