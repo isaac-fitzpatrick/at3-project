@@ -42,7 +42,7 @@ class CommentForm(forms.ModelForm):
     
 class LessonForm(forms.ModelForm):
     files = forms.FileField(
-        widget=forms.ClearableFileInput(attrs={'multiple': True}),
+        widget=forms.FileInput(),
         required=False,
         label="Additional Resources"
     )
@@ -50,17 +50,10 @@ class LessonForm(forms.ModelForm):
     class Meta:
         model = Lesson
         fields = ['name', 'due_date', 'description']
-
-    def save(self, commit=True):
-        lesson = super().save(commit=commit)
-        files = self.files.getlist('files')
-        for file in files:
-            LessonResource.objects.create(lesson=lesson, file=file)
-        return lesson
     
 class StudentSubmissionForm(forms.ModelForm):
     files = forms.FileField(
-        widget=forms.ClearableFileInput(attrs={'multiple': True}),
+        widget=forms.FileInput(),
         required=True,
         label="Upload Files"
     )
@@ -78,7 +71,7 @@ class StudentSubmissionForm(forms.ModelForm):
     
 class AssessmentSubmissionForm(forms.ModelForm):
     files = forms.FileField(
-        widget=forms.ClearableFileInput(attrs={'multiple': True}),
+        widget=forms.FileInput(),
         required=True,
         label="Upload Files"
     )

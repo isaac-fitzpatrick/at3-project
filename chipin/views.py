@@ -337,13 +337,12 @@ def create_lesson(request, group_id):
             lesson = form.save(commit=False)
             lesson.group = group
             lesson.save()
-            form.save_m2m()  # Save the many-to-many relationships
-            messages.success(request, f'Lesson "{lesson.name}" created successfully!')
+            for f in request.FILES.getlist('files'):
+                LessonResource.objects.create(lesson=lesson, file=f)
             return redirect('chipin:group_detail', group_id=group.id)
     else:
         form = LessonForm()
-
-    return render(request, 'chipin/create_lesson.html', {'group': group})
+    return render(request, 'chipin/create_lesson.html', {'group': group, 'form': form})
 
 @login_required
 def lesson_detail(request, lesson_id):
@@ -399,7 +398,7 @@ def submit_assessment(request, group_id, assessment_id):
 def assessment_detail(request, group_id, assessment_id):
     group = get_object_or_404(Group, id=group_id)
     assessment = get_object_or_404(Event, id=assessment_id, group=group)
-    submissions = assessment.submissions.all()
+    submissions = assessment.assessment_submissions.all()
 
     if request.method == 'POST' and request.user == group.admin:
         submission_id = request.POST.get('submission_id')
