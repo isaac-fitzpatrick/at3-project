@@ -21,6 +21,7 @@ urlpatterns = [
    path('group/<int:group_id>/event/<int:event_id>/leave/', views.leave_event, name='leave_event'),
    path('group/<int:group_id>/event/<int:event_id>/delete/', views.delete_event, name='delete_event'),
    path('lesson/<int:lesson_id>/', views.lesson_detail, name='lesson_detail'),
+   path('lesson/<int:lesson_id>/delete', views.delete_lesson, name='delete_lesson'),
    path('group/<int:group_id>/create_lesson/', views.create_lesson, name='create_lesson'),
    path('group/<int:group_id>/assessment/<int:assessment_id>/submit/', views.submit_assessment, name='submit_assessment'),
    path('group/<int:group_id>/assessment/<int:assessment_id>/', views.assessment_detail, name='assessment_detail'),

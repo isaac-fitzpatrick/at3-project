@@ -1,0 +1,130 @@
+commit d439622b0c699f23d3d53c7784cc0daa137f30aa
+Author: Isaac Fitzpatrick <isaacfitzpatrick22@gmail.com>
+Date:   Wed Jul 23 17:13:11 2025 +1000
+
+    migrated all chipin models, working assessment page (uploading submissions student sided/downloading submissions teacher sided untested. -- create lesson button needed (doesnt display anything if no lessons in course.
+
+commit 99e088a1f92a61ed449e38efb682b4abfbab9c82
+Author: isaac fitz <isaacfitzpatrick111@icloud.com>
+Date:   Thu Jul 3 11:42:10 2025 +1000
+
+    Added teacher feedback/marking to assessment submissions -- remember to make migrations
+
+commit 6f35bae34ba88a8fb13079c01336e84b12499dfb
+Author: isaac fitz <isaacfitzpatrick111@icloud.com>
+Date:   Thu Jul 3 11:20:16 2025 +1000
+
+    minor tweaks to last commit
+
+commit eaf440e0cebedf0f917e1baf414b95318287add9
+Author: isaac fitz <isaacfitzpatrick111@icloud.com>
+Date:   Thu Jul 3 09:57:58 2025 +1000
+
+    added lessons + student submissions, need to make migrations
+
+commit 5e22ddaedfbf9062d665fcf86080e3e0ebcd20f5
+Merge: 07dd121 e1b97a7
+Author: Isaac Fitzpatrick <isaacfitzpatrick22@gmail.com>
+Date:   Tue Jun 10 14:00:39 2025 +1000
+
+    Merge branch 'main' of https://github.com/isaac-fitzpatrick/at3-project
+
+commit 07dd12142730cdecd27b7bc5c92758df51bc338e
+Author: Isaac Fitzpatrick <isaacfitzpatrick22@gmail.com>
+Date:   Tue Jun 10 14:00:25 2025 +1000
+
+    Fixed assessment notification upload + view
+
+commit e1b97a70dea78008064e972524d95c5eb0693de7
+Author: isaac fitzpatrick <164290144+isaac-fitzpatrick@users.noreply.github.com>
+Date:   Fri May 30 12:43:42 2025 +1000
+
+    Update README.md
+
+commit e5098a23af2fd4237079504f6c846cc673ad50eb
+Author: Isaac Fitzpatrick <isaacfitzpatrick22@gmail.com>
+Date:   Thu May 29 15:33:43 2025 +1000
+
+    Pfp added on /user/ + mostly done for assessment notifications just fix dir link
+
+commit dd487637e85f88df852459955dc0f5ff5f44e9a5
+Author: Isaac Fitzpatrick <isaacfitzpatrick22@gmail.com>
+Date:   Thu May 29 11:16:57 2025 +1000
+
+    Added enroll student, uploading notifications & pfps to their respective folders (incomplete)
+
+commit 78e11cfd87343f39500868255f5719a7809abfdd
+Author: Isaac Fitzpatrick <isaacfitzpatrick22@gmail.com>
+Date:   Wed May 28 17:01:53 2025 +1000
+
+    Working teacher acc + db changes + other changes
+
+commit 7300ac4598d97043dea923ef2291a218704a9ec5
+Author: Isaac Fitzpatrick <isaacfitzpatrick22@gmail.com>
+Date:   Mon May 26 11:35:42 2025 +1000
+
+    More visual changes
+
+commit 1a0635194c7ebe5b18468fbc0c57b3f13a9a9991
+Author: Isaac Fitzpatrick <isaacfitzpatrick22@gmail.com>
+Date:   Mon May 26 10:00:49 2025 +1000
+
+    Visual changes + added user.permissions (bool) for differentiation - test later forgot admin pass
+
+commit f21bd8ad72a8cd0f72e53ca74343d27fab20097e
+Author: Isaac Fitzpatrick <isaacfitzpatrick22@gmail.com>
+Date:   Sun May 25 21:17:35 2025 +1000
+
+    Added specific login page messages/labels
+
+commit b6acff7fd497c084e126a601787b5db3360e1bd8
+Merge: 374b4c5 8a142fa
+Author: Isaac Fitzpatrick <isaacfitzpatrick22@gmail.com>
+Date:   Sun May 25 13:08:30 2025 +1000
+
+    Merge branch 'main' of https://github.com/isaac-fitzpatrick/at3-project
+
+commit 374b4c5eaab9122360859fbeb904139650578742
+Author: Isaac Fitzpatrick <isaacfitzpatrick22@gmail.com>
+Date:   Sun May 25 13:04:43 2025 +1000
+
+    Separate teacher db - try access on laptop
+
+commit b74212cf0d92520fb7b0918d9e33145225b8d724
+Author: Isaac Fitzpatrick <isaacfitzpatrick22@gmail.com>
+Date:   Sun May 25 13:01:38 2025 +1000
+
+    Added a separate teachers db + linked to their login page - cannot access db on this client, try on laptop
+
+commit 8a142faaaaff530853671f342d03326033f95dbd
+Author: isaac fitzpatrick <164290144+isaac-fitzpatrick@users.noreply.github.com>
+Date:   Sat May 24 17:21:14 2025 +1000
+
+    Update README.md
+
+commit 52c77a27bfa233e48afdda5e7ce052fb59c4284c
+Author: isaac fitzpatrick <164290144+isaac-fitzpatrick@users.noreply.github.com>
+Date:   Sat May 24 17:20:50 2025 +1000
+
+    Update README.md
+
+commit a1b8b8c6cd6bc04389fc54bc59de243ee46282de
+Author: isaac fitzpatrick <164290144+isaac-fitzpatrick@users.noreply.github.com>
+Date:   Sat May 24 17:19:53 2025 +1000
+
+    created README.md
+    
+    just info abt the project
+
+commit c22582df9bec5339d04c7dba64fce86107371745
+Author: Isaac Fitzpatrick <isaacfitzpatrick22@gmail.com>
+Date:   Sat May 24 15:19:51 2025 +1000
+
+    Added the teacher_login screen, home page, and oth
+    er minor changes. Still need to seperate teacher login db from normal login db.
+
+commit 5172a7a9f61e3b69e2778ff14f2281f85f2edb6d
+Author: Isaac Fitzpatrick <isaacfitzpatrick22@gmail.com>
+Date:   Fri May 23 19:38:40 2025 +1000
+
+    Uploading template (previous proj)

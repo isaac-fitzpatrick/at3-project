@@ -41,7 +41,7 @@ class Lesson(models.Model):
     description = models.TextField() 
     file = models.FileField(upload_to='resources/', blank=True, null=True) # Uploaded resources by the teacher
     group = models.ForeignKey(Group, related_name='lessons', on_delete=models.CASCADE) # Parent
-    response = models.ManyToManyField(User, related_name='responses', blank=True) # Tracks the amount of responses/content of responses
+    submissions = models.ManyToManyField(User, related_name='submissions', blank=True) # Tracks the amount of responses/content of responses
     
     def __str__(self):
         return self.name

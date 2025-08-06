@@ -2,13 +2,12 @@
 {% block title %}{{ lesson.name }} - {{ group.name }} {% endblock %}
 {% block content %}
     <h1>{{ lesson.name }}</h1>
-    <p>Teacher: {{ group.admin.profile.nickname }}</p>
 
     <div class="body">
-        <a>Due on: {{ lesson.due_date }}</a>
+        <p>Due on: {{ lesson.due_date }}</p>
         <h2>Description:</h2>
-            <a>{{ lesson.description }}</a>
-        {% if lesson.resources.exists %}
+            <p>{{ lesson.description }}</p>
+        {% if lesson.resource.exists %}
             <h2>Additional Resources:</h2>
                 <ul>
                     {% for resource in lesson.resources.all %}
@@ -18,7 +17,7 @@
                     {% endfor %}
                 </ul>
         {% else %}
-            <h2>No additional resources provided.</h2>
+            <p>No additional resources provided.</p>
         {% endif %}
     </div>
     {% if request.user != group.admin %}
@@ -33,10 +32,12 @@
                     {% endfor %}
                 </ul>
             {% else %}
-            <a>Upload Work</a>
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                {% form.as_p %}
+                <div>
+                    <label for="file">Submission:</label>
+                    <input type="file" name="file" required>
+                </div>
                 <button type="submit">Upload</button>
             </form>
             {% endif %}

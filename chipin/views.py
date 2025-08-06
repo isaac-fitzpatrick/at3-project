@@ -54,6 +54,7 @@ def group_detail(request, group_id, edit_comment_id=None):
     group = get_object_or_404(Group, id=group_id)
     comments = group.comments.all().order_by('-created_at')  # Fetch all comments for the group
     events = group.events.all()  # Fetch all events associated with the group
+    lessons = group.lessons.all()  # Fetch all lessons associated with the group 
     # Add a new comment or edit an existing comment
     if edit_comment_id: # Fetch the comment to edit, if edit_comment_id is provided
         comment_to_edit = get_object_or_404(Comment, id=edit_comment_id)
@@ -80,6 +81,7 @@ def group_detail(request, group_id, edit_comment_id=None):
         'group': group,
         'comments': comments,
         'events': events,
+        'lessons': lessons,
         'form': form,
         'comment_to_edit': comment_to_edit,
     })
@@ -332,17 +334,19 @@ def create_lesson(request, group_id):
         messages.error(request, "Only the teacher can create lessons.")
         return redirect('chipin:group_detail', group_id=group.id)
     if request.method == 'POST':
-        form = LessonForm(request.POST, request.FILES)
-        if form.is_valid():
-            lesson = form.save(commit=False)
-            lesson.group = group
-            lesson.save()
-            for f in request.FILES.getlist('files'):
-                LessonResource.objects.create(lesson=lesson, file=f)
-            return redirect('chipin:group_detail', group_id=group.id)
-    else:
-        form = LessonForm()
-    return render(request, 'chipin/create_lesson.html', {'group': group, 'form': form})
+        lesson_name = request.POST.get('name')
+        lesson_due_date = request.POST.get('due_date')
+        lesson_description = request.POST.get('description')
+        lesson_resources = request.FILES.get('resource', None)
+        lesson = Lesson.objects.create(
+            name=lesson_name,
+            due_date=lesson_due_date,
+            description=lesson_description,  
+            group=group
+        )
+        messages.success(request, f'Lesson "{lesson_name}" created successfully!')
+        return redirect('chipin:group_detail', group_id=group.id)
+    return render(request, 'chipin/create_lesson.html', {'group': group})
 
 @login_required
 def lesson_detail(request, lesson_id):
@@ -355,6 +359,7 @@ def lesson_detail(request, lesson_id):
             submission = form.save(commit=False)
             submission.lesson = lesson
             submission.student = request.user
+            submission.file = request.file
             submission.save()
             form.save_m2m()
             messages.success(request, "Your files have been uploaded successfully!")
@@ -367,6 +372,19 @@ def lesson_detail(request, lesson_id):
         'form': form,
         'submissions': submissions,
     })
+
+@login_required
+def delete_lesson(request, group_id, lesson_id):
+    group = get_object_or_404(Group, id=group_id)
+    lesson = get_object_or_404(Lesson, id=lesson_id, group=group)
+    # Ensure only the group admin can delete the event
+    if request.user != group.admin:
+        messages.error(request, "Only the group administrator can delete lessons.")
+        return redirect('chipin:group_detail', group_id=group.id)
+    # Delete the event
+    lesson.delete()
+    messages.success(request, f"The lesson '{lesson.name}' has been deleted.")
+    return redirect('chipin:group_detail', group_id=group.id)
 
 @login_required
 def submit_assessment(request, group_id, assessment_id):
