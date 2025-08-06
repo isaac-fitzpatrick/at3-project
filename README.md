@@ -1,4 +1,4 @@
 - Assessment Task 3 for the Year 12 HSC Software Engineering Course.
 - This project stems from our previous project (ssa_project2 on my GitHub) and reuses select parts of its code, repurposing them for this webpage.
-- Please install all required dependencies from requirements.txt or else the project will not run properly.
+- Please install all required dependencies or else the project will not run properly (requred dependencies will show up in terminal).
 - All code is original and written by Isaac Fitzpatrick.
